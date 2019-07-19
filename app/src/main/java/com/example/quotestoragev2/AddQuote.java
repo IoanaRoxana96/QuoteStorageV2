@@ -10,17 +10,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.TextUtilsCompat;
+
 
 public class AddQuote extends AppCompatActivity {
     private QuoteDBManager quoteDBManager = null;
     private static final String INPUT_ID = "INPUT_ID";
     private static final String INPUT_QUOTE = "INPUT_QUOTE";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         setTitle("Add quote");
         //Get quote editor control
@@ -32,7 +35,7 @@ public class AddQuote extends AppCompatActivity {
         String quote = intent.getStringExtra(INPUT_QUOTE);
 
         //Cannot edit exist quote
-        if(quoteId != -1) {
+        if (quoteId != -1) {
             quoteEditor.setText(quote);
             quoteEditor.setEnabled(false);
         }
@@ -40,6 +43,7 @@ public class AddQuote extends AppCompatActivity {
         //Open SQLite database connection
         quoteDBManager = new QuoteDBManager(getApplicationContext());
         quoteDBManager.open();
+
 
         Button saveButton = (Button) findViewById(R.id.save);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -49,13 +53,13 @@ public class AddQuote extends AppCompatActivity {
 
                 StringBuffer errorMessageBuf = new StringBuffer();
 
-                if(TextUtils.isEmpty(quote)) {
+                if (TextUtils.isEmpty(quote)) {
                     errorMessageBuf.append("Quote cannot be empty/r/n");
                 }
-                if(errorMessageBuf.length() > 0) {
+                if (errorMessageBuf.length() > 0) {
                     Toast.makeText(getApplicationContext(), errorMessageBuf.toString(), Toast.LENGTH_SHORT).show();
                 } else {
-                    if(quoteId == -1) {
+                    if (quoteId == -1) {
                         //Insert new quote
                         quoteDBManager.insertQuote(quote);
                     } else {
@@ -73,10 +77,11 @@ public class AddQuote extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(quoteDBManager != null) {
+        if (quoteDBManager != null) {
             quoteDBManager.close();
             quoteDBManager = null;
         }
@@ -85,10 +90,11 @@ public class AddQuote extends AppCompatActivity {
     //Start this activity from other class
     public static void start(Context ctx, int id, String quote) {
         Intent intent = new Intent(ctx, AddQuote.class);
-        intent.addFlags (Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(INPUT_ID, id);
         intent.putExtra(INPUT_QUOTE, quote);
         ctx.startActivity(intent);
 
-        }
     }
+}
+

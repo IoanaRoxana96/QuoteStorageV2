@@ -2,9 +2,7 @@ package com.example.quotestoragev2;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,43 +11,43 @@ import java.util.List;
 public class QuoteDBManager {
     private Context ctx;
     private DatabaseManager dbManager;
-    private static final String DB_QUOTE = "Quote.db";
-    private static final String TABLE_NAME_QUOTE = "quote";
+    private static final String DB_NAME = "Quote.db";
+    private static final String TABLE_NAME_QUOTE = "Quote";
 
     //SQLite database need table primary key column named as _id
     public static final String TABLE_QUOTE_COLUMN_ID = "_id";
     public static final String TABLE_QUOTE_COLUMN_QUOTE = "quote";
 
     private int DB_VERSION = 1;
-    List<String> tableQuoteList = null;
+    List<String> tableNameList = null;
     List<String> createTableSqlList = null;
 
     public QuoteDBManager (Context ctx) {
         this.ctx = ctx;
         this.init();
-        this.dbManager = new DatabaseManager(ctx, this.DB_QUOTE, this.DB_VERSION, this.tableQuoteList, this.createTableSqlList);
+        this.dbManager = new DatabaseManager(ctx, this.DB_NAME, this.DB_VERSION, this.tableNameList, this.createTableSqlList);
 
     }
 
 
     private void init() {
-        if(this.tableQuoteList == null) {
-            this.tableQuoteList = new ArrayList<String>();
+        if(this.tableNameList == null) {
+            this.tableNameList = new ArrayList<String>();
         }
         if(this.createTableSqlList == null) {
             this.createTableSqlList = new ArrayList<String>();
         }
-        this.tableQuoteList.add(TABLE_NAME_QUOTE);
+        this.tableNameList.add(TABLE_NAME_QUOTE);
 
         //Build create quote table sql
         StringBuffer sqlBuf = new StringBuffer();
 
         //Create table sql
-        sqlBuf.append("create table");
+        sqlBuf.append("create table ");
         sqlBuf.append(TABLE_NAME_QUOTE);
         sqlBuf.append("( ");
         sqlBuf.append(TABLE_QUOTE_COLUMN_ID);
-        sqlBuf.append("integer primary key autoincrement,");
+        sqlBuf.append(" integer primary key autoincrement, ");
         sqlBuf.append(TABLE_QUOTE_COLUMN_QUOTE);
         sqlBuf.append(" text )");
         this.createTableSqlList.add(sqlBuf.toString());
@@ -125,6 +123,7 @@ public class QuoteDBManager {
         }
         return ret;
     }
+
 
     //Return sqlite database cursor object
     public Cursor getAllQuoteCursor() {

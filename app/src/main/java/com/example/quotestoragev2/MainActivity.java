@@ -1,14 +1,12 @@
 package com.example.quotestoragev2;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
-import android.view.MenuInflater;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
@@ -16,6 +14,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,20 +28,22 @@ public class MainActivity extends AppCompatActivity {
     private TextView quoteListEmptyTextView = null;
     private SimpleCursorAdapter listViewDataAdapter = null;
 
+
     private final String fromColumnArr[] = {QuoteDBManager.TABLE_QUOTE_COLUMN_ID, QuoteDBManager.TABLE_QUOTE_COLUMN_QUOTE};
     private final int toViewIdArr[] = {R.id.quote_item_id, R.id.quote_item_quote};
 
     private List<QuoteDTO> quoteCheckedItemList = new ArrayList<QuoteDTO>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.quote_list_view);
 
         setTitle("Show table rows in list view");
         quoteListView = (ListView) findViewById(R.id.quote_list_view);
         quoteListEmptyTextView = (TextView) findViewById(R.id.quote_list_empty_text_view);
-        //quoteListView.setEmptyView(quoteListEmptyTextView);
+        quoteListView.setEmptyView(quoteListEmptyTextView);
 
         //Get SQLite database query cursor
         quoteDBManager = new QuoteDBManager(getApplicationContext());
@@ -54,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Set simple cursor adapter to list view
         quoteListView.setAdapter(listViewDataAdapter);
+
+
+        // random
+
 
         //When list view item is clicked
         quoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void addCheckListItem(QuoteDTO quoteDto, boolean add) {
         if (quoteCheckedItemList != null) {
@@ -151,17 +159,7 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.menu_add) {
                 AddQuote.start(getApplicationContext(), -1, "");
-            } else if (itemId == R.id.menu_edit) {
-                if (quoteCheckedItemList != null) {
-                    int size = quoteCheckedItemList.size();
-                    if (size != 1) {
-                        Toast.makeText(this, "Select one row to edit", Toast.LENGTH_SHORT).show();
-                    } else {
-                        QuoteDTO tmpDto = quoteCheckedItemList.get(0);
-                        AddQuote.start(getApplicationContext(), tmpDto.getId(), tmpDto.getQuote());
-                    }
-                }
-            } else if (itemId == R.id.menu_delete) {
+            }  else if (itemId == R.id.menu_delete) {
                 if (quoteCheckedItemList != null) {
                     int size = quoteCheckedItemList.size();
                     if (size == 0) {
@@ -196,4 +194,10 @@ public class MainActivity extends AppCompatActivity {
                 quoteDBManager = null;
             }
         }
-    }
+
+     private static final String SQL_RANDOM_QUOTE = "SELECT quote FROM Quote OREDER BY RANDOM() LIMIT 1";
+}
+
+
+
+
